@@ -4,13 +4,20 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default (
   handler: (req: NextApiRequest, res: NextApiResponse) => {}
 ) => async (req: NextApiRequest, res: NextApiResponse) => {
+  if (!process.env.DB_CREDENTIALS) {
+    console.error(
+      "No DB_CREDENTIALS en variable. Please check your next.config.js file."
+    );
+    return;
+  }
+
   const db = mongoose.connection;
 
   console.log("db.readyState", db.readyState);
 
   if (db.readyState == 1) return handler(req, res);
 
-  mongoose.connect("credentialsToAdd", {
+  mongoose.connect(process.env.DB_CREDENTIALS, {
     useNewUrlParser: true
   });
 
