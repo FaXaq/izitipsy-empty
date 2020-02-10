@@ -42,14 +42,14 @@ const Home: NextPage<{}> = () => {
   }, [tickets, step]);
 
   function stepTransactionProfit(tickets: any[]): number {
-    // create a tip map
-    const tipMap = tickets.map(t => {
+    // create a profit map
+    const profitMap = tickets.map(t => {
       if (!t.tips) return 0;
-      return t.tips;
+      const ticketBankingFee = (t.tips + t.amount) * bankingFee - staticFee;
+      return t.tips - ticketBankingFee;
     });
 
-    // average is the sum divided by the length
-    return tipMap.reduce((p, n) => p + n, 0) / tipMap.length;
+    return profitMap.reduce((p, n) => p + n) / profitMap.length;
   }
 
   return (
