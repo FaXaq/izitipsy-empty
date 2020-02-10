@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import fetch from "isomorphic-unfetch";
 import { useState, useEffect } from "react";
+import Steps from "../components/Steps";
 
 const Home: NextPage<{}> = () => {
   const [tickets, setTickets] = useState<any[]>([]);
@@ -40,9 +41,24 @@ const Home: NextPage<{}> = () => {
     setAmounts(sortTicketsByAmounts(tickets));
   }, [tickets, step]);
 
+  function stepTransactionProfit(tickets: any[]): number {
+    // create a tip map
+    const tipMap = tickets.map(t => {
+      if (!t.tips) return 0;
+      return t.tips;
+    });
+
+    // average is the sum divided by the length
+    return tipMap.reduce((p, n) => p + n, 0) / tipMap.length;
+  }
+
   return (
     <div>
-      <p>{JSON.stringify(amounts)}</p>
+      <Steps
+        amounts={amounts}
+        stepValue={step}
+        stepTransactionProfit={stepTransactionProfit}
+      />
     </div>
   );
 };
