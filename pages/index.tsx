@@ -3,6 +3,8 @@ import fetch from "isomorphic-unfetch";
 import { useState, useEffect } from "react";
 import Steps from "../components/Steps";
 
+import "../assets/main.scss";
+
 const Home: NextPage<{}> = () => {
   const [tickets, setTickets] = useState<any[]>([]);
   const [staticFee, setStaticFee] = useState(0.3);
@@ -53,7 +55,35 @@ const Home: NextPage<{}> = () => {
   }
 
   return (
-    <div>
+    <div className="container mx-auto">
+      <img src="/images/simplyk-logo.png" className="block h-20 mx-auto" />
+      <h3 className="text-2xl text-center font-bold p-4">
+        Bénéfices par prix du billet
+      </h3>
+      <div className="flex items-center justify-center py-2">
+        <label className="p-2" htmlFor="bankingFee">
+          Frais bancaires
+        </label>
+        <input
+          className="bg-white border border-gray-300 py-2 px-4 block appearance-none leading-normal w-40 block"
+          type="number"
+          id="bankingFee"
+          value={bankingFee * 100}
+          onChange={e => setBankingFee(parseFloat(e.target.value) / 100)}
+        />
+      </div>
+      <div className="flex items-center justify-center py-2">
+        <label className="p-2" htmlFor="staticFee">
+          Frais fixes
+        </label>
+        <input
+          className="bg-white border border-gray-300 py-2 px-4 block appearance-none leading-normal w-40 block"
+          type="number"
+          id="staticFee"
+          value={staticFee}
+          onChange={e => setStaticFee(parseFloat(e.target.value))}
+        />
+      </div>
       <Steps
         amounts={amounts}
         stepValue={step}

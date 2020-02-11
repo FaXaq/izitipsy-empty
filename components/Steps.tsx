@@ -22,7 +22,14 @@ const Steps = (props: StepsProps) => {
   }
 
   return (
-    <table>
+    <table className="table-auto mx-auto">
+      <thead>
+        <tr>
+          <th className="border px-4 py-2">Prix du billet</th>
+          <th className="border px-4 py-2">Nombre de billets</th>
+          <th className="border px-4 py-2">Bénéfice net moyen (%)</th>
+        </tr>
+      </thead>
       <tbody>{steps}</tbody>
     </table>
   );
