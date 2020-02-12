@@ -35,7 +35,6 @@ const Home: NextPage<{}> = () => {
       // add ticket to this step
       steps[roundedStep].push(t);
     });
-    console.log(steps);
     return steps;
   }
 
@@ -43,7 +42,7 @@ const Home: NextPage<{}> = () => {
     setAmounts(sortTicketsByAmounts(tickets));
   }, [tickets, step]);
 
-  function stepTransactionProfit(tickets: any[]): number {
+  function stepTransactionProfit(tickets: any[], stepValue: number): number {
     // create a profit map
     const profitMap = tickets.map(t => {
       if (!t.tips) return 0;
@@ -52,7 +51,9 @@ const Home: NextPage<{}> = () => {
       return t.tips - ticketBankingFee;
     });
 
-    return profitMap.reduce((p, n) => p + n) / profitMap.length;
+    const profit = profitMap.reduce((p, n) => p + n) / profitMap.length;
+
+    return profit > 0 ? (profit * 100) / stepValue : 0;
   }
 
   return (
@@ -87,7 +88,7 @@ const Home: NextPage<{}> = () => {
       </div>
       <Steps
         amounts={amounts}
-        stepValue={step}
+        stepPrice={step}
         stepTransactionProfit={stepTransactionProfit}
       />
     </div>
