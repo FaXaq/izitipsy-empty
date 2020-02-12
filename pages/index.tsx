@@ -43,17 +43,24 @@ const Home: NextPage<{}> = () => {
   }, [tickets, step]);
 
   function stepTransactionProfit(tickets: any[], stepValue: number): number {
-    // create a profit map
-    const profitMap = tickets.map(t => {
-      if (!t.tips) return 0;
+    // create a profit and amount map
+    const ticketsMap = tickets.map(t => {
+      if (!t.tips) t.tips = 0;
       // We should use t.total but data mismatch tips plus amount of ticket
+      // sometimes, so calculus is more precise
       const ticketBankingFee = (t.tips + t.amount) * bankingFee + staticFee;
-      return t.tips - ticketBankingFee;
+      return {
+        profit: t.tips - ticketBankingFee,
+        amount: t.amount
+      };
     });
 
-    const profit = profitMap.reduce((p, n) => p + n) / profitMap.length;
+    const { profit, amount } = ticketsMap.reduce((p, n) => ({
+      profit: p.profit + n.profit,
+      amount: p.amount + n.amount
+    }));
 
-    return profit > 0 ? (profit * 100) / stepValue : 0;
+    return profit > 0 ? profit * 100 / amount : 0;
   }
 
   return (
