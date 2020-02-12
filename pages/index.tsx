@@ -4,18 +4,22 @@ import { useState, useEffect } from "react";
 import Steps from "../components/Steps";
 
 import "../assets/main.scss";
+import Loader from "../components/Loader";
 
 const Home: NextPage<{}> = () => {
+  const [loading, setLoading] = useState(false);
+
   const [tickets, setTickets] = useState<any[]>([]);
   const [staticFee, setStaticFee] = useState(0.3);
-  // Currently banking fee is a 2.9%
   const [bankingFee, setBankingFee] = useState(0.029);
   const [step, setStep] = useState(20);
   const [amounts, setAmounts] = useState({});
 
   async function refreshTickets() {
+    setLoading(true);
     const res = await fetch("/api/dashboard");
     const unsortedTickets = await res.json();
+    setLoading(false);
     setTickets(unsortedTickets);
   }
 
@@ -91,8 +95,21 @@ const Home: NextPage<{}> = () => {
           id="staticFee"
           value={staticFee}
           onChange={e => setStaticFee(parseFloat(e.target.value))}
+          />
+      </div>
+      <div className="flex items-center justify-center py-2">
+        <label className="p-2" htmlFor="bankingFee">
+          Prix des tranches
+        </label>
+        <input
+          className="bg-white border border-gray-300 py-2 px-4 block appearance-none leading-normal w-40 block"
+          type="number"
+          id="bankingFee"
+          value={step}
+          onChange={e => setStep(parseInt(e.target.value))}
         />
       </div>
+      <Loader loading={loading} />
       <Steps
         amounts={amounts}
         stepPrice={step}
