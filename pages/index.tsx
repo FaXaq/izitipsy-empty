@@ -47,7 +47,8 @@ const Home: NextPage<{}> = () => {
     // create a profit map
     const profitMap = tickets.map(t => {
       if (!t.tips) return 0;
-      const ticketBankingFee = (t.tips + t.amount) * bankingFee - staticFee;
+      // We should use t.total but data mismatch tips plus amount of ticket
+      const ticketBankingFee = (t.tips + t.amount) * bankingFee + staticFee;
       return t.tips - ticketBankingFee;
     });
 
